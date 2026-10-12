@@ -1,0 +1,30 @@
+{
+    "name": "cod-demo-radar",
+    "version": "1.0.0",
+    "description": "Browser-based 2D replay, kill feed and heatmaps for CoD1, CoD2 and CoD4/CoD4X demos.",
+    "license": "AGPL-3.0-only",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sunspinx/cod-demo-radar.git"
+    },
+    "homepage": "https://github.com/sunspinx/cod-demo-radar",
+    "type": "module",
+    "main": "src/index.js",
+    "files": [
+        "src",
+        "LICENSE",
+        "LICENSES",
+        "NOTICE.md"
+    ],
+    "scripts": {
+        "test": "node --test --no-warnings tests/demoRadar.test.mjs"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "peerDependencies": {
+        "vue": "^3.4.0",
+        "vue-i18n": "^9.14.0"
+    },
+    "author": "SOLUQA Technology s.r.o."
+}
