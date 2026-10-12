@@ -3,6 +3,8 @@ export default {
         "title": "Demo Radar",
         "subtitle": "Visual analysis of team activity and game events",
         "intro": "2D replay, kill feed and heatmaps for Call of Duty 4 (CoD4X), Call of Duty 2 (CoD2x / zPAM) and Call of Duty 1.5 demos. Demos are read in your browser and never uploaded.",
+        "backToTools": "Tools",
+        "sourceCode": "Zdrojový kód (AGPL-3.0)",
         "toolDescription": "Replay your .dm_1 demos in 2D with a kill feed, round timeline and heatmaps.",
         "open": "Open",
         "back": "Demos",

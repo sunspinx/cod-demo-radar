@@ -12,16 +12,17 @@ source of the Demo Radar that runs there.
 - 2D replay with player positions, view directions, grenades, smokes and bomb events
 - Kill feed, round timeline with event lanes, per-round scoreboard and player stats
 - Heatmaps (positions, kills, deaths, ...)
-- UI in 10 languages (`src/i18n`)
+- UI in 10 languages (`src/demo-radar/i18n`)
 
 ## Layout
 
 ```
 src/
+  demo-radar-app.js  entry point used on fpschallenge.eu (mounts on #demo-radar)
   demo-radar/        parsers (CoD4, CoD2/CoD1), demo -> match model, renderer, heatmaps
-  components/        Vue 3 components (entry: DemoRadar/ShowDemoRadar.vue)
+    i18n/            demoRadar strings per locale (vue-i18n), follows <html lang>
+  components/        Vue 3 components (root: DemoRadar/ShowDemoRadar.vue)
   composables/       useDemoRadar.js - state and playback loop
-  i18n/              demoRadar strings per locale (vue-i18n)
   index.js           exports
 tests/               node:test suite
 ```
@@ -31,15 +32,15 @@ tests/               node:test suite
 Requirements: Vue 3, vue-i18n 9, Tailwind CSS 3 (the components use Tailwind classes; scan
 `src/**/*.{js,vue}` in your `content` config, and define `.bg-fps-900 { background: #111827; }`).
 
+On fpschallenge.eu the radar is built from `src/demo-radar-app.js` as its own bundle and mounted on
+`<div id="demo-radar"></div>`; it picks its language from `<html lang>` and follows changes to it.
+To embed it elsewhere:
+
 ```js
 import { createApp } from 'vue';
-import { createI18n } from 'vue-i18n';
-import { ShowDemoRadar } from 'cod-demo-radar';
-import en from 'cod-demo-radar/src/i18n/en.js';
+import { ShowDemoRadar, createDemoRadarI18n } from 'cod-demo-radar';
 
-const i18n = createI18n({ legacy: false, locale: 'en', messages: { en } });
-
-createApp(ShowDemoRadar).use(i18n).mount('#app');
+createApp(ShowDemoRadar).use(createDemoRadarI18n()).mount('#demo-radar');
 ```
 
 Parsing without the UI:

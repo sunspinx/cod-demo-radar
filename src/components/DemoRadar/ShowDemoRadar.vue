@@ -42,7 +42,7 @@ onBeforeUnmount(() => {
         <!-- Header -->
         <div class="mb-6">
             <a href="/tools" class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-gray-500 hover:text-gray-300 transition-colors mb-1.5">
-                <span aria-hidden="true">&larr;</span> {{ t('playTools.title') }}
+                <span aria-hidden="true">&larr;</span> {{ t('demoRadar.backToTools') }}
             </a>
             <h1 class="flex items-center gap-3 text-2xl sm:text-3xl font-black tracking-tight text-white leading-tight">
                 <i class="fas fa-satellite-dish text-[#28a5c0] text-xl sm:text-2xl"></i>
@@ -54,8 +54,14 @@ onBeforeUnmount(() => {
 
         <DemoRadarViewer v-if="radar.match.value" />
         <DemoRadarLibrary v-else />
+
+        <a href="https://github.com/sunspinx/cod-demo-radar" target="_blank" rel="noopener"
+           class="mt-6 inline-flex items-center gap-1.5 text-[11px] text-gray-500 hover:text-gray-300 transition-colors">
+            <i class="fab fa-github" aria-hidden="true"></i> {{ t('demoRadar.sourceCode') }}
+        </a>
     </div>
 </template>
+
 
 <style>
 /* forms.scss hides every checkbox/radio off-screen and draws a fake box on a `+ label` sibling; the radar wraps its inputs in the label instead, so it shows the inputs again and themes Flowbite's checkbox/radio for the dark radar. */

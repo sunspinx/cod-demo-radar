@@ -31,7 +31,7 @@ Changes relative to the upstream projects (GPLv3 / AGPLv3 section 5a):
 ## Original code
 
 Everything else (`src/demo-radar/extract.js`, `match.js`, `renderer.js`, `heat.js`, `iwi.js`,
-`maps.js`, `format.js`, `tables_cod1.js`, `src/components`, `src/composables`, `src/i18n`, `tests`)
+`maps.js`, `format.js`, `tables_cod1.js`, `src/demo-radar/i18n`, `src/demo-radar-app.js`, `src/components`, `src/composables`, `tests`)
 was written for [FPSChallenge](https://fpschallenge.eu) and is released under the AGPL-3.0 as part of this program.
 
 ## Trademarks and game assets
