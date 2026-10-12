@@ -456,7 +456,7 @@ export const killsDeathsUntil = (m, T) => {
 };
 
 /**
- * Everything the HUD and side panel show at T: round, score, alive counts, per-team player rows and the
+ * Everything the HUD and kill feed show at T: round, score, alive counts, per-team player rows and the
  * round's kill feed.
  */
 export const panelAt = (m, T, selected = -1) => {

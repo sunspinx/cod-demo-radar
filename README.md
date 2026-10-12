@@ -10,7 +10,7 @@ source of the Demo Radar that runs there.
 
 - CoD4 / CoD4X, CoD2 (protocol 115-119) and CoD1 1.5 demo parsing, entirely client-side
 - 2D replay with player positions, view directions, grenades, smokes and bomb events
-- Kill feed, round timeline with event lanes, per-round scoreboard and player stats
+- Score HUD with players alive, kill feed overlay, round timeline with event lanes, scoreboard and player stats
 - Heatmaps (positions, kills, deaths, ...)
 - UI in 10 languages (`src/demo-radar/i18n`)
 

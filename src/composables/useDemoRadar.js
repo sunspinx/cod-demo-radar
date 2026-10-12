@@ -3,8 +3,8 @@ import { buildMatch, parseOptions } from '../demo-radar/extract.js';
 import { decodeIWI } from '../demo-radar/iwi.js';
 import { densityImage, heatImage, heatPoints } from '../demo-radar/heat.js';
 import {
-    currentRoundIdx, firstRoundStart, idxAt, laneCounts, mapImageUrl, panelAt, playerSummary, prepareMatch, rangeBounds,
-    roundJumpTarget, scoreboard, setupMapping,
+    currentRoundIdx, firstRoundStart, idxAt, mapImageUrl, panelAt, playerSummary, prepareMatch, rangeBounds,
+    roundJumpTarget, scoreboard,
 } from '../demo-radar/match.js';
 import {
     LANES, drawMap, drawTimeline, fitView, fromScreen, hitPlayer, timelineFraction, timelineHeight, zoomView,
@@ -18,6 +18,13 @@ const IMAGE_FILE = /\.(png|jpe?g|webp|iwi)$/i;
 const SPEEDS = [0.5, 1, 2, 4, 8];
 
 const dpr = () => Math.max(1, window.devicePixelRatio || 1);
+
+/**
+ * Map area kept free by Fit (CSS px): the score HUD on top and, on wide maps, the tool column on the right
+ * (mirrored left to stay centred). Narrow maps skip the sides, the margin would cost too much width there.
+ */
+const FIT_INSET = { top: 116, side: 52, bottom: 8 };
+const FIT_SIDE_INSET_MIN_WIDTH = 640;
 
 const canvasFromRgba = ({ rgba, size }) => {
     const canvas = document.createElement('canvas');
@@ -47,18 +54,16 @@ const createDemoRadar = () => {
     const drawMode = ref(false);
     const hasStrokes = ref(false);
     const orient = ref('auto');
-    const sidePanel = ref(true);
+    const killFeed = ref(true);
     const fullscreen = ref(false);
     const mapMessage = ref(null);
     const tooltip = ref(null);
     const popover = ref(null);
     const panel = shallowRef(null);
     const stats = shallowRef([]);
-    const counts = shallowRef({});
 
     const heat = reactive({ type: 'off', team: 'all', side: 'all', player: -1, radius: 14, gain: 10, players: true });
     const layers = reactive({ names: true, cones: true, trails: false, shots: true, killLines: true, deaths: true, bomb: true, mapImage: true });
-    const lanes = reactive({ rounds: true, kills: true, grenades: true, smokes: true, bomb: true });
 
     // Not reactive: written every frame or holding canvases
     const S = {
@@ -204,7 +209,6 @@ const createDemoRadar = () => {
         heat.player = -1;
         popover.value = null;
         stats.value = scoreboard(m);
-        counts.value = laneCounts(m);
         time.value = S.t;
         loadMapImage(m);
         requestAnimationFrame(() => {
@@ -249,7 +253,11 @@ const createDemoRadar = () => {
             return;
         }
 
-        S.view = fitView(match.value, S.mapCanvas.width, S.mapCanvas.height);
+        const d = dpr();
+        const side = S.mapCanvas.clientWidth >= FIT_SIDE_INSET_MIN_WIDTH ? FIT_INSET.side * d : 0;
+        const inset = { top: FIT_INSET.top * d, right: side, bottom: FIT_INSET.bottom * d, left: side };
+
+        S.view = fitView(match.value, S.mapCanvas.width, S.mapCanvas.height, inset);
         invalidate();
     };
 
@@ -260,17 +268,6 @@ const createDemoRadar = () => {
 
         S.view = zoomView(S.view, factor, sx ?? S.mapCanvas.width / 2, sy ?? S.mapCanvas.height / 2);
         invalidate();
-    };
-
-    const setOrient = (value) => {
-        orient.value = value;
-
-        if (match.value) {
-            setupMapping(match.value, value);
-            S.background = null;
-            S.heatKey = '';
-            fit();
-        }
     };
 
     // ---------- playback
@@ -355,11 +352,6 @@ const createDemoRadar = () => {
         invalidate();
     };
 
-    const toggleLane = (name) => {
-        lanes[name] = !lanes[name];
-        invalidate();
-    };
-
     const toggleGrenades = () => {
         showGrenades.value = !showGrenades.value;
         invalidate();
@@ -375,9 +367,8 @@ const createDemoRadar = () => {
         invalidate();
     };
 
-    const toggleSidePanel = () => {
-        sidePanel.value = !sidePanel.value;
-        requestAnimationFrame(resize);
+    const toggleKillFeed = () => {
+        killFeed.value = !killFeed.value;
     };
 
     const openPopover = (cn, x, y) => {
@@ -570,8 +561,7 @@ const createDemoRadar = () => {
         }
 
         if (S.timelineCanvas) {
-            const visibleLanes = LANES.filter((lane) => lanes[lane]);
-            const wanted = timelineHeight(visibleLanes.length);
+            const wanted = timelineHeight(LANES.length);
 
             if (Math.abs(S.timelineCanvas.clientHeight - wanted) > 1) {
                 S.timelineCanvas.style.height = wanted + 'px';
@@ -579,7 +569,7 @@ const createDemoRadar = () => {
             }
 
             drawTimeline(S.timelineCanvas.getContext('2d'), {
-                m, t: S.t, range: range.value, lanes: visibleLanes, labels: S.laneLabels, dpr: dpr(),
+                m, t: S.t, range: range.value, lanes: LANES, labels: S.laneLabels, dpr: dpr(),
             });
         }
 
@@ -727,12 +717,12 @@ const createDemoRadar = () => {
 
     return {
         SPEEDS,
-        library, match, loading, playing, speed, range, selected, time, showGrenades, drawMode, hasStrokes, orient,
-        sidePanel, fullscreen, mapMessage, tooltip, popover, panel, stats, counts, heat, layers, lanes,
+        library, match, loading, playing, speed, range, selected, time, showGrenades, drawMode, hasStrokes,
+        killFeed, fullscreen, mapMessage, tooltip, popover, panel, stats, heat, layers,
         loadFiles, dropFiles, loadMapImageFile, openMatch, closeMatch, removeFromLibrary,
-        fit, zoom, setOrient, seek, togglePlay, setRange, jumpRound, seekToKill, currentRound,
-        selectPlayer, setHeat, updateHeat, toggleLayer, toggleLane, toggleGrenades, toggleDraw, clearDrawings,
-        toggleSidePanel, openPopover, heatForPlayer, toggleFullscreen,
+        fit, zoom, seek, togglePlay, setRange, jumpRound, seekToKill, currentRound,
+        selectPlayer, setHeat, updateHeat, toggleLayer, toggleGrenades, toggleDraw, clearDrawings,
+        toggleKillFeed, openPopover, heatForPlayer, toggleFullscreen,
         mapPointerDown, mapPointerMove, mapPointerUp, mapLeave, mapWheel, timelineSeek,
         attachCanvas, detachCanvas, start, stop, setLaneLabels,
     };

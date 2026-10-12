@@ -46,26 +46,13 @@ export default {
             "round": "Round {label}",
             "knifeRound": "Knife round",
             "warmup": "Warmup",
-            "inProgress": "In progress",
-            "beforeFirstRound": "Before the first round",
             "stratTime": "Strat time",
             "wonBy": "Won by {team}",
             "alive": "{alive}/{total} alive",
-            "attack": "attack",
-            "defence": "defence",
-            "player": "Player",
-            "inHand": "In hand",
-            "k": "K",
-            "d": "D",
-            "pov": "POV",
-            "povTitle": "The demo follows this player",
-            "stats": "Player stats",
+            "versus": "vs",
             "hp": "HP",
-            "hpOnlyPov": "Health and ammo are only recorded for the player the demo follows.",
             "killsThisRound": "Kills this round",
-            "none": "None yet",
-            "hs": "HS",
-            "hidePanel": "Hide panel"
+            "hs": "HS"
         },
         "reasons": {
             "bombDefused": "Bomb defused",
@@ -77,16 +64,14 @@ export default {
         "controls": {
             "previousRound": "Previous round ([)",
             "play": "Play / pause (space)",
+            "back": "Back 5 s (←)",
+            "forward": "Forward 5 s (→)",
             "nextRound": "Next round (])",
             "range": "Range",
             "entireMatch": "Entire match",
-            "grenades": "Grenades",
-            "grenadesTitle": "Show grenades (G)",
             "layers": "Layers",
-            "sidePanel": "Toggle side panel",
             "fullscreen": "Fullscreen",
-            "lanes": "Lanes",
-            "hint": "Click or drag the timeline to seek · ←/→ 5 s · [ ] rounds · H heatmap"
+            "hint": "Click or drag to seek · ←/→ 5 s · [ ] rounds · H heatmap"
         },
         "lanes": {
             "rounds": "Rounds",
@@ -128,18 +113,9 @@ export default {
         },
         "layers": {
             "title": "Show on map",
-            "names": "Player names",
-            "cones": "View direction",
             "trails": "Movement trails",
-            "shots": "Shots",
-            "killLines": "Kill lines",
-            "deaths": "Death markers",
-            "bomb": "Bomb and sites",
-            "mapImage": "Map image",
-            "imageTitle": "Map image",
-            "loadImage": "Load map image (.png, .jpg, .iwi)",
-            "orientation": "Orientation",
-            "auto": "Auto"
+            "grenades": "Grenades",
+            "killFeed": "Kill feed"
         },
         "stats": {
             "roundsWon": "{count} rounds won",

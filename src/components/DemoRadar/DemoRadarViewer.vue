@@ -3,13 +3,12 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDemoRadar } from '../../composables/useDemoRadar';
 import DemoRadarMap from './DemoRadarMap.vue';
-import DemoRadarSidePanel from './DemoRadarSidePanel.vue';
 import DemoRadarControls from './DemoRadarControls.vue';
 import DemoRadarStats from './DemoRadarStats.vue';
 import DemoRadarPlayerPopover from './DemoRadarPlayerPopover.vue';
 
 const { t } = useI18n();
-const { match, sidePanel, fullscreen, closeMatch, toggleFullscreen } = useDemoRadar();
+const { match, fullscreen, closeMatch, toggleFullscreen } = useDemoRadar();
 
 const root = ref(null);
 
@@ -39,22 +38,14 @@ const title = computed(() => {
             <span class="px-1.5 py-0.5 rounded bg-white/[0.06] text-[0.6rem] font-semibold uppercase tracking-wider text-gray-400">{{ match.meta.gameLabel || 'CoD4' }} · {{ match.meta.gametype || '?' }}</span>
             <span class="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-[0.6rem] font-semibold uppercase tracking-wider text-amber-400">{{ t('demoRadar.local') }} · {{ modLabel }}</span>
             <span class="text-xs text-gray-500 truncate min-w-0">{{ title }}</span>
-            <button type="button"
-                    class="ml-auto w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-white hover:bg-white/[0.06] transition-colors"
-                    :title="t('demoRadar.controls.fullscreen')"
-                    @click="toggleFullscreen(root)">
-                <i class="fas" :class="fullscreen ? 'fa-compress' : 'fa-expand'"></i>
-            </button>
         </div>
 
-        <!-- Map + side panel -->
-        <div class="flex flex-col lg:flex-row rounded-xl border border-white/[0.06] bg-white/[0.02] overflow-hidden"
-             :class="fullscreen ? 'lg:h-[calc(100vh-15rem)]' : 'lg:h-[min(72vh,640px)] lg:min-h-[440px]'">
-            <DemoRadarMap class="h-[62vh] lg:h-auto lg:flex-1 min-w-0" />
-            <DemoRadarSidePanel v-if="sidePanel" class="lg:w-72 shrink-0 border-t lg:border-t-0 lg:border-l border-white/[0.06]" />
+        <!-- Player: map, timeline, controls -->
+        <div class="rounded-xl border border-white/[0.06] overflow-hidden">
+            <DemoRadarMap class="h-[62vh]" :class="fullscreen ? 'lg:h-[calc(100vh-17rem)]' : 'lg:h-[min(78vh,880px)] lg:min-h-[520px]'" />
+            <DemoRadarControls class="border-t border-white/[0.06]" @fullscreen="toggleFullscreen(root)" />
         </div>
 
-        <DemoRadarControls />
         <DemoRadarStats />
         <DemoRadarPlayerPopover />
     </div>

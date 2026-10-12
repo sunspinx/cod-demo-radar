@@ -3,8 +3,8 @@
 import { lowerBound, formatClock } from './format.js';
 import { currentRoundIdx, idxAt, rangeBounds, statesAt } from './match.js';
 
-export const TEAM_COLORS = ['#e5484d', '#4c8dff'];
-export const TEAM_COLORS_RGB = [[229, 72, 77], [76, 141, 255]];
+export const TEAM_COLORS = ['#e5484d', '#3fb950'];
+export const TEAM_COLORS_RGB = [[229, 72, 77], [63, 185, 80]];
 export const NEUTRAL_COLOR = '#9aa3b5';
 export const teamColor = (squad) => (squad >= 0 ? TEAM_COLORS[squad] : NEUTRAL_COLOR);
 
@@ -26,15 +26,24 @@ const roundRect = (c, x, y, w, h, r) => {
 export const toScreen = (view, u, v) => [view.ox + u * view.s, view.oy + v * view.s];
 export const fromScreen = (view, x, y) => [(x - view.ox) / view.s, (y - view.oy) / view.s];
 
-/** View (scale + offset in device pixels) that fits the players' area into a W x H canvas. */
-export const fitView = (m, W, H) => {
+/**
+ * View (scale + offset in device pixels) that fits the players' area into a W x H canvas, optionally
+ * inside an inset (device pixels) so overlays such as the score HUD do not cover the map.
+ */
+export const fitView = (m, W, H, inset = { top: 0, right: 0, bottom: 0, left: 0 }) => {
     const b = m.bounds;
     const pad = 0.06;
     const bw = (b.maxU - b.minU) * (1 + 2 * pad);
     const bh = (b.maxV - b.minV) * (1 + 2 * pad);
-    const s = Math.min(W / bw, H / bh);
+    const w = Math.max(1, W - inset.left - inset.right);
+    const h = Math.max(1, H - inset.top - inset.bottom);
+    const s = Math.min(w / bw, h / bh);
 
-    return { s, ox: W / 2 - ((b.minU + b.maxU) / 2) * s, oy: H / 2 - ((b.minV + b.maxV) / 2) * s };
+    return {
+        s,
+        ox: inset.left + w / 2 - ((b.minU + b.maxU) / 2) * s,
+        oy: inset.top + h / 2 - ((b.minV + b.maxV) / 2) * s,
+    };
 };
 
 /** Zooms by factor f around a screen point (device pixels). */

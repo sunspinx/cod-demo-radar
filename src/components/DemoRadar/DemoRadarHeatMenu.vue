@@ -27,9 +27,9 @@ const sides = computed(() => [
 </script>
 
 <template>
-    <DemoRadarDropdown :active="heat.type !== 'off'">
+    <DemoRadarDropdown variant="icon" :active="heat.type !== 'off'" :title="label">
         <template #button>
-            <i class="fas fa-fire"></i> {{ label }}
+            <i class="fas fa-fire"></i>
         </template>
 
         <div class="mb-1.5 text-[0.6rem] font-bold uppercase tracking-widest text-gray-500">{{ t('demoRadar.heat.title') }}</div>
